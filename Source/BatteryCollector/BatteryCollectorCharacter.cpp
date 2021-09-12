@@ -9,6 +9,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Pickups/BatteryPickup.h"
 #include "Pickups/PickupBase.h"
 
 //////////////////////////////////////////////////////////////////////////
@@ -93,6 +94,8 @@ void ABatteryCollectorCharacter::CollectPickups()
 	// Create an array to put our overlapped actors in
 	TArray<AActor*> OverlappedActors;
 
+	float CachedPowerLevel = 0.0f;
+
 	// Fill that array by getting the overlapped actors in our collection sphere
 	CollisionSphere->GetOverlappingActors(OverlappedActors);
 	
@@ -107,9 +110,21 @@ void ABatteryCollectorCharacter::CollectPickups()
 		{
 			OverlappedPickup->OnPickupCollected();
 
+			ABatteryPickup* BatteryPickup = Cast<ABatteryPickup>(OverlappedPickup);
+
+			if (BatteryPickup)
+			{
+				CachedPowerLevel += BatteryPickup->GetBatteryChargeAmount();
+			}
+
 			// and we call the SetPickupIsActive()
 			OverlappedPickup->SetPickupIsActive(false);
 		}
+	}
+
+	if (CachedPowerLevel > 0)
+	{
+		UpdateCurrentPowerLevel(CachedPowerLevel);
 	}
 }
 
