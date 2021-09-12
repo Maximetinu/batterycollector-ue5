@@ -5,6 +5,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/SphereComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -45,6 +46,10 @@ ABatteryCollectorCharacter::ABatteryCollectorCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+
+	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere Collider"));
+	CollisionSphere->SetupAttachment(RootComponent);
+	CollisionSphere->SetSphereRadius(200.0f);
 }
 
 //////////////////////////////////////////////////////////////////////////
