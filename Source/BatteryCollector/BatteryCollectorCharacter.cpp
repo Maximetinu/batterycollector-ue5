@@ -9,6 +9,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Pickups/PickupBase.h"
 
 //////////////////////////////////////////////////////////////////////////
 // ABatteryCollectorCharacter
@@ -79,6 +80,31 @@ void ABatteryCollectorCharacter::SetupPlayerInputComponent(class UInputComponent
 
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &ABatteryCollectorCharacter::OnResetVR);
+}
+
+void ABatteryCollectorCharacter::CollectPickups()
+{
+	// Create an array to put our overlapped actors in
+	TArray<AActor*> OverlappedActors;
+
+	// Fill that array by getting the overlapped actors in our collection sphere
+	CollisionSphere->GetOverlappingActors(OverlappedActors);
+	
+	// Iterate over the array and cast the actor we find to a pickup
+	//for (const auto& Actor : OverlappedActors)
+	for(int i = 0; i < OverlappedActors.Num(); ++i)
+	{
+		APickupBase* OverlappedPickup = Cast<APickupBase>(OverlappedActors[i]);
+		
+		// if that actor found is valid and its active and its not about to be destroyed, then we call the OnCollected() Function on it
+		if (OverlappedPickup && OverlappedPickup->IsPickupActive() && !OverlappedPickup->IsPendingKill())
+		{
+			OverlappedPickup->OnPickupCollected();
+
+			// and we call the SetPickupIsActive()
+			OverlappedPickup->SetPickupIsActive(false);
+		}
+	}
 }
 
 
