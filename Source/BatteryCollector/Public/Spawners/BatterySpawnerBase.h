@@ -22,10 +22,16 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Spawner")
 	class UBoxComponent* SpawnVolume;
 
+	UPROPERTY(EditAnywhere, Category="Spawner")
+	TSubclassOf<class APickupBase> ActorToSpawn;
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintPure, Category="Spawner")
 	FVector GetRandomSpawnPoint();
+
+private:
+	void SpawnBatteryActor();
 };

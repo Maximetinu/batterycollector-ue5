@@ -2,7 +2,7 @@
 
 
 #include "Spawners/BatterySpawnerBase.h"
-
+#include "BatteryCollector/Public/Pickups/PickupBase.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -35,5 +35,28 @@ FVector ABatterySpawnerBase::GetRandomSpawnPoint()
 	const FVector SpawnLimits = SpawnVolume->Bounds.BoxExtent;
 
 	return UKismetMathLibrary::RandomPointInBoundingBox(SpawnOrigin, SpawnLimits);
+}
+
+void ABatterySpawnerBase::SpawnBatteryActor()
+{
+	// Makes sure we have an actor to spawn
+	if (!ActorToSpawn) { return; }
+
+	FRotator RandomRotation;
+	RandomRotation.Yaw = FMath::RandRange(1, 3) * 360.0f;
+	RandomRotation.Pitch = FMath::RandRange(1, 3) * 360.0f;
+	RandomRotation.Roll = FMath::RandRange(1, 3) * 360.0f;
+	
+	// setup the spawn parameters
+	FActorSpawnParameters Params;
+	Params.Owner = this;
+	Params.Instigator = GetInstigator();
+	Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	
+	// spawn actor
+	if (!GetWorld()) { return; }
+
+	// APickupBase* ActorSpawned =
+	GetWorld()->SpawnActor<APickupBase>(ActorToSpawn, GetRandomSpawnPoint(), RandomRotation, Params);
 }
 
