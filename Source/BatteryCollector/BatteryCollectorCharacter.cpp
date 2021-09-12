@@ -51,6 +51,9 @@ ABatteryCollectorCharacter::ABatteryCollectorCharacter()
 	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere Collider"));
 	CollisionSphere->SetupAttachment(RootComponent);
 	CollisionSphere->SetSphereRadius(200.0f);
+
+	BasePowerLevel = 2500.0f;
+	CurrentPowerLevel = BasePowerLevel;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -110,6 +113,21 @@ void ABatteryCollectorCharacter::CollectPickups()
 	}
 }
 
+
+float ABatteryCollectorCharacter::GetBasePowerLevel()
+{
+	return BasePowerLevel;
+}
+
+float ABatteryCollectorCharacter::GetCurrentPowerLevel()
+{
+	return CurrentPowerLevel;
+}
+
+void ABatteryCollectorCharacter::UpdateCurrentPowerLevel(float Amount)
+{
+	CurrentPowerLevel += Amount;
+}
 
 void ABatteryCollectorCharacter::OnResetVR()
 {

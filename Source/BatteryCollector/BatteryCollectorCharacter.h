@@ -35,6 +35,27 @@ public:
 
 protected:
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Power")
+	float BasePowerLevel;
+
+	UPROPERTY(VisibleAnywhere, Category="Power")
+	float CurrentPowerLevel;
+
+public:
+
+	UFUNCTION(BlueprintPure, Category="Power")
+	float GetBasePowerLevel();
+
+	UFUNCTION(BlueprintPure, Category="Power")
+	float GetCurrentPowerLevel();
+
+	UFUNCTION(BlueprintCallable)
+	void UpdateCurrentPowerLevel(float Amount);
+
+	
+
+protected:
+
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();
 
