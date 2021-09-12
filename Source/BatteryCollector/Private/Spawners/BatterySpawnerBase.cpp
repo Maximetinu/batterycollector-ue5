@@ -29,3 +29,11 @@ void ABatterySpawnerBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+FVector ABatterySpawnerBase::GetRandomSpawnPoint()
+{
+	const FVector SpawnOrigin = SpawnVolume->Bounds.Origin;
+	const FVector SpawnLimits = SpawnVolume->Bounds.BoxExtent;
+
+	return UKismetMathLibrary::RandomPointInBoundingBox(SpawnOrigin, SpawnLimits);
+}
+

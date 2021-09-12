@@ -27,4 +27,5 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintPure, Category="Spawner")
+	FVector GetRandomSpawnPoint();
 };
