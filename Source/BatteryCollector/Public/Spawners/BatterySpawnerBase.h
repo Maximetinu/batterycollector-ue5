@@ -25,6 +25,14 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Spawner")
 	TSubclassOf<class APickupBase> ActorToSpawn;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Spawner")
+	float MinSpawnDelay;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Spawner")
+	float MaxSpawnDelay;
+
+	FTimerHandle SpawnTimerHandle;
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -34,4 +42,6 @@ public:
 
 private:
 	void SpawnBatteryActor();
+
+	float RandomSpawnDelay;
 };

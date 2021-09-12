@@ -14,13 +14,18 @@ ABatterySpawnerBase::ABatterySpawnerBase()
 	PrimaryActorTick.bCanEverTick = true;
 
 	SpawnVolume = CreateDefaultSubobject<UBoxComponent>(TEXT("Spawner"));
+
+	MinSpawnDelay = 0.5f;
+	MaxSpawnDelay = 5.0f;
 }
 
 // Called when the game starts or when spawned
 void ABatterySpawnerBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	RandomSpawnDelay = FMath::RandRange(MinSpawnDelay, MaxSpawnDelay);
+	GetWorld()->GetTimerManager().SetTimer(SpawnTimerHandle, this, &ABatterySpawnerBase::SpawnBatteryActor, RandomSpawnDelay, false);
 }
 
 // Called every frame
@@ -58,5 +63,8 @@ void ABatterySpawnerBase::SpawnBatteryActor()
 
 	// APickupBase* ActorSpawned =
 	GetWorld()->SpawnActor<APickupBase>(ActorToSpawn, GetRandomSpawnPoint(), RandomRotation, Params);
+
+	RandomSpawnDelay = FMath::RandRange(MinSpawnDelay, MaxSpawnDelay);
+	GetWorld()->GetTimerManager().SetTimer(SpawnTimerHandle, this, &ABatterySpawnerBase::SpawnBatteryActor, RandomSpawnDelay, false);
 }
 
