@@ -26,3 +26,10 @@ void ABatteryPickup::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void ABatteryPickup::OnPickupCollected_Implementation()
+{
+	Super::OnPickupCollected_Implementation();
+
+	Destroy();
+}
+
