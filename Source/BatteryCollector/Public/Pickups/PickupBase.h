@@ -15,9 +15,18 @@ public:
 	// Sets default values for this actor's properties
 	APickupBase();
 
+	// Gets the value of whether or not this pickup is active
+	UFUNCTION(BlueprintPure, Category="Pickup")
+	bool IsPickupActive() const;
+
+	UFUNCTION(BlueprintCallable, Category="Pickup")
+	void SetPickupIsActive(bool NewActiveState);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
+	bool bIsActive;
 
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	UStaticMeshComponent* PickupMesh;
