@@ -11,6 +11,8 @@ ABatteryPickup::ABatteryPickup()
 	PrimaryActorTick.bCanEverTick = true;
 
 	PickupMesh->SetSimulatePhysics(true);
+
+	ChargeAmount = 100.0f;
 }
 
 // Called when the game starts or when spawned
@@ -31,5 +33,10 @@ void ABatteryPickup::OnPickupCollected_Implementation()
 	Super::OnPickupCollected_Implementation();
 
 	Destroy();
+}
+
+float ABatteryPickup::GetBatteryChargeAmount()
+{
+	return  ChargeAmount;
 }
 
