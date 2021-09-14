@@ -35,11 +35,25 @@ public:
 
 protected:
 
+	virtual void OnConstruction(const FTransform& Transform) override;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Power")
 	float BasePowerLevel;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Power")
+	float BaseSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Power")
+	float SpeedMultiplier;
+
 	UPROPERTY(VisibleAnywhere, Category="Power")
 	float CurrentPowerLevel;
+
+	UPROPERTY(BlueprintReadWrite, Category="Power|VFX")
+	UMaterialInstanceDynamic* PowerLevelDynamicMaterial;
+
+	UFUNCTION(BlueprintCallable)
+	void UpdatePlayerMaterialColor();
 
 public:
 

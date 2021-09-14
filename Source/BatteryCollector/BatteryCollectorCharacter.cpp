@@ -55,6 +55,18 @@ ABatteryCollectorCharacter::ABatteryCollectorCharacter()
 
 	BasePowerLevel = 2500.0f;
 	CurrentPowerLevel = BasePowerLevel;
+
+	BaseSpeed = 10.0f;
+	SpeedMultiplier = 0.65f;
+}
+
+void ABatteryCollectorCharacter::OnConstruction(const FTransform& Transform)
+{
+	Super::OnConstruction(Transform);
+
+	UMaterialInterface* MaterialToEdit = GetMesh()->GetMaterial(0);
+	PowerLevelDynamicMaterial = UMaterialInstanceDynamic::Create(MaterialToEdit, this);
+	GetMesh()->SetMaterial(0, PowerLevelDynamicMaterial);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -129,6 +141,18 @@ void ABatteryCollectorCharacter::CollectPickups()
 }
 
 
+void ABatteryCollectorCharacter::UpdatePlayerMaterialColor()
+{
+	// Get our initial and current power level create a ration(alpha)
+	const float Alpha = GetCurrentPowerLevel() / GetBasePowerLevel();
+	
+	// use alpha to lerp  inbetween 2 color variables
+	FLinearColor FinalColor = FLinearColor::LerpUsingHSV(FLinearColor::White, FLinearColor::Red, 1 - Alpha);
+	
+	// Get material set a vector parameter
+	PowerLevelDynamicMaterial->SetVectorParameterValue("BodyColor", FinalColor);
+}
+
 float ABatteryCollectorCharacter::GetBasePowerLevel()
 {
 	return BasePowerLevel;
@@ -142,6 +166,10 @@ float ABatteryCollectorCharacter::GetCurrentPowerLevel()
 void ABatteryCollectorCharacter::UpdateCurrentPowerLevel(float Amount)
 {
 	CurrentPowerLevel += Amount;
+
+	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed + SpeedMultiplier * CurrentPowerLevel;
+
+	UpdatePlayerMaterialColor();
 }
 
 void ABatteryCollectorCharacter::OnResetVR()
