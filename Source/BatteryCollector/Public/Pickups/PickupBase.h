@@ -28,7 +28,7 @@ protected:
 	
 	bool bIsActive;
 
-	UPROPERTY(EditDefaultsOnly, Category="Components")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
 	UStaticMeshComponent* PickupMesh;
 
 public:
