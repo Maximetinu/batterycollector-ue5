@@ -2,6 +2,7 @@
 
 #include "BatteryCollectorGameMode.h"
 #include "BatteryCollectorCharacter.h"
+#include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
 
@@ -16,6 +17,13 @@ ABatteryCollectorGameMode::ABatteryCollectorGameMode()
 
 	DelayTime = 0.2f;
 	DecayAmount = 50.0f;
+
+	PowerToWinMultiplier = 1.5f;
+}
+
+float ABatteryCollectorGameMode::GetPowerAmountToWin() const
+{
+	return PowerAmountToWin;
 }
 
 void ABatteryCollectorGameMode::BeginPlay()
@@ -25,6 +33,18 @@ void ABatteryCollectorGameMode::BeginPlay()
 	FTimerHandle PowerDecayTimerHandle;
 
 	GetWorld()->GetTimerManager().SetTimer(PowerDecayTimerHandle, this, &ABatteryCollectorGameMode::StartPowerLevelDecay, DelayTime, true);
+
+	ABatteryCollectorCharacter* PlayerCharacter = Cast<ABatteryCollectorCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
+
+	if (PlayerCharacter)
+	{
+		PowerAmountToWin = PlayerCharacter->GetBasePowerLevel() * PowerToWinMultiplier;
+	}
+
+	if (MainHUDClass)
+	{
+		ActiveWidget = CreateWidget<UUserWidget>(GetWorld(), MainHUDClass);
+	}
 }
 
 void ABatteryCollectorGameMode::StartPowerLevelDecay()
@@ -35,8 +55,7 @@ void ABatteryCollectorGameMode::StartPowerLevelDecay()
 	// check if our power level is greater than zero
 	if (PlayerCharacter && PlayerCharacter->GetCurrentPowerLevel() > 0.0f)
 	{
+		// call the function that updates our power level
 		PlayerCharacter->UpdateCurrentPowerLevel(-DecayAmount);
 	}
-	
-	// call the function that updates our power level
 }
