@@ -44,6 +44,7 @@ void ABatteryCollectorGameMode::BeginPlay()
 	if (MainHUDClass)
 	{
 		ActiveWidget = CreateWidget<UUserWidget>(GetWorld(), MainHUDClass);
+		ActiveWidget->AddToViewport();
 	}
 }
 
